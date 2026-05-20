@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Hospital</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1>Smart Hospital</h1>
+      <p>Queue & Bed Management</p>
+
+      <button class="nav active" data-tab="dashboard">Dashboard</button>
+      <button class="nav" data-tab="patients">Patients</button>
+      <button class="nav" data-tab="tokens">Tokens</button>
+      <button class="nav" data-tab="wards">Wards</button>
+      <button class="nav" data-tab="beds">Beds</button>
+
+      <div class="clock-shell">
+  <div class="clock-label">Reception Time</div>
+
+  <div class="analog-clock">
+    <div class="dial-glow"></div>
+
+    <div class="tick tick12"></div>
+    <div class="tick tick1"></div>
+    <div class="tick tick2"></div>
+    <div class="tick tick3"></div>
+    <div class="tick tick4"></div>
+    <div class="tick tick5"></div>
+    <div class="tick tick6"></div>
+    <div class="tick tick7"></div>
+    <div class="tick tick8"></div>
+    <div class="tick tick9"></div>
+    <div class="tick tick10"></div>
+    <div class="tick tick11"></div>
+
+    <div class="number number12">12</div>
+    <div class="number number1">1</div>
+    <div class="number number2">2</div>
+    <div class="number number3">3</div>
+    <div class="number number4">4</div>
+    <div class="number number5">5</div>
+    <div class="number number6">6</div>
+    <div class="number number7">7</div>
+    <div class="number number8">8</div>
+    <div class="number number9">9</div>
+    <div class="number number10">10</div>
+    <div class="number number11">11</div>
+
+    <div class="hand hour" id="hour"></div>
+    <div class="hand minute" id="minute"></div>
+    <div class="hand second" id="second"></div>
+
+    <div class="center-core"></div>
+  </div>
+
+  <div class="clock-meta">
+    <span id="clockDay">Monday</span>
+    <span id="clockDate">19 May 2026</span>
+  </div>
+</div>
+    </aside>
+
+    <main class="main">
+      <section id="dashboard" class="tab active">
+        <div class="cards">
+          <div class="card"><h3>Patients</h3><p id="cPatients">0</p></div>
+          <div class="card"><h3>Tokens</h3><p id="cTokens">0</p></div>
+          <div class="card"><h3>Wards</h3><p id="cWards">0</p></div>
+          <div class="card"><h3>Beds</h3><p id="cBeds">0</p></div>
+        </div>
+
+        <div class="grid">
+          <div class="panel">
+            <h2>Add Patient</h2>
+            <form id="patientForm">
+              <input name="name" placeholder="Patient Name" required />
+              <input name="age" type="number" placeholder="Age" required />
+              <select name="type">
+                <option value="NORMAL">Normal</option>
+                <option value="SENIOR">Senior</option>
+                <option value="EMERGENCY">Emergency</option>
+              </select>
+              <button type="submit">Save</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h2>Add Ward</h2>
+            <form id="wardForm">
+              <input name="name" placeholder="Ward Name" required />
+              <select name="ward_type">
+                <option value="GENERAL">General</option>
+                <option value="ICU">ICU</option>
+                <option value="PRIVATE">Private</option>
+              </select>
+              <button type="submit">Save</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="patients" class="tab">
+        <div class="panel">
+          <div class="row">
+            <h2>Patients</h2>
+            <button id="loadPatients">Load</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Type</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody id="patientsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tokens" class="tab">
+  <div class="grid">
+    <div class="panel">
+      <h2>Add Token</h2>
+      <form id="tokenForm">
+        <input name="patient" type="number" placeholder="Patient ID" required />
+        <input name="number" type="number" placeholder="Token Number" required />
+        <select name="status">
+          <option value="WAITING">Waiting</option>
+          <option value="CALLED">Called</option>
+          <option value="DONE">Done</option>
+          <option value="SKIPPED">Skipped</option>
+        </select>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="row">
+        <h2>Call Next Patient</h2>
+        <button id="callNextBtn">Call Next</button>
+      </div>
+
+      <div class="next-box" id="nextBox">
+        <p>No patient called yet</p>
+      </div>
+
+      <div class="row" style="margin-top: 12px;">
+        <button id="skipTokenBtn">Skip Token</button>
+        <button id="doneTokenBtn">Mark Done</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="row">
+        <h2>Tokens</h2>
+        <button id="loadTokens">Load</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient</th>
+            <th>No.</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="tokensTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+      <section id="wards" class="tab">
+        <div class="grid">
+          <div class="panel">
+            <h2>Add Ward</h2>
+            <form id="wardForm2">
+              <input name="name" placeholder="Ward Name" required />
+              <select name="ward_type">
+                <option value="GENERAL">General</option>
+                <option value="ICU">ICU</option>
+                <option value="PRIVATE">Private</option>
+              </select>
+              <button type="submit">Save</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="row">
+              <h2>Wards</h2>
+              <button id="loadWards">Load</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody id="wardsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="beds" class="tab">
+        <div class="grid">
+          <div class="panel">
+            <h2>Add Bed</h2>
+            <form id="bedForm">
+              <input name="ward" type="number" placeholder="Ward ID" required />
+              <input name="number" placeholder="Bed Number" required />
+              <select name="status">
+                <option value="AVAILABLE">Available</option>
+                <option value="OCCUPIED">Occupied</option>
+                <option value="MAINTENANCE">Maintenance</option>
+              </select>
+              <button type="submit">Save</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="row">
+              <h2>Beds</h2>
+              <button id="loadBeds">Load</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Ward</th>
+                  <th>No.</th>
+                  <th>Status</th>
+                  <th>Patient</th>
+                </tr>
+              </thead>
+              <tbody id="bedsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <div id="toast" class="toast"></div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
