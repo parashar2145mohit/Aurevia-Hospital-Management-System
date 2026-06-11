@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -6,6 +7,17 @@ from rest_framework.response import Response
 from .models import Patient, Token
 from .serializers import PatientSerializer, TokenSerializer
 
+class PatientViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Patient.objects.all().order_by("-created_at")
+    serializer_class = PatientSerializer
+
+class TokenViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Token.objects.select_related("patient").all().order_by("created_at")
+    serializer_class = TokenSerializer
 
 class PatientViewSet(viewsets.ModelViewSet):
     queryset = Patient.objects.all().order_by("-created_at")
